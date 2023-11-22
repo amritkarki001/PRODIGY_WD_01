@@ -1,0 +1,61 @@
+body {
+    margin: 0;
+    font-family: 'Arial', sans-serif;
+    background: #f4f4f4;
+    height: 3000px;
+    background: linear-gradient(135deg, #ff6d00, #833ab4);
+}
+
+nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background: #3498db;
+    /* Default background color */
+    padding: 10px 0;
+    text-align: center;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    transition: background 0.3s ease;
+    /* Smooth transition for background color */
+}
+
+nav a {
+    text-decoration: none;
+    color: #fff;
+    /* Default font color */
+    padding: 10px 20px;
+    margin: 0 10px;
+    transition: color 0.3s ease;
+    /* Smooth transition for font color */
+}
+
+nav a:hover {
+    color: #ffd700;
+    /* Font color on hover */
+}
+
+
+/* Change style on scroll */
+
+nav.scrolled {
+    background: #333;
+    /* Background color when scrolled */
+}
+
+
+/* Page content padding to avoid overlap with fixed navigation */
+
+.content {
+    padding-top: 60px;
+    /* Adjust based on the height of your navigation */
+}
+
+
+/* Toggle active state color */
+
+.active {
+    color: #ddd;
+    background-color: #555;
+}
