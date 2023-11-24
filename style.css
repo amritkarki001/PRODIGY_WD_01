@@ -60,6 +60,15 @@ nav.scrolled {
     background-color: #423535;
 }
 
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    background: rgba(212, 62, 62, 0);
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(197, 59, 59, 0), 0);
+}
+
 footer {
-    padding: 165px;
+    padding: 100px;
 }
