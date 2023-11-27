@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tic Tac Toe</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background: linear-gradient(to bottom right, #4CAF50, #2196F3);
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+        
+        table {
+            border-collapse: collapse;
+            margin: 20px auto;
+        }
+        
+        table,
+        th,
+        td {
+            border: 1px solid black;
+        }
+        
+        th,
+        td {
+            width: 50px;
+            height: 50px;
+            text-align: center;
+            font-size: 24px;
+        }
+        
+        th {
+            background-color: #f2f2f2;
+        }
+        
+        td {
+            cursor: pointer;
+        }
+        
+        .message {
+            font-size: 20px;
+            margin-top: 20px;
+        }
+        
+        .mode-buttons {
+            margin-top: 20px;
+        }
+        
+        .play-again {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Tic Tac Toe</h1>
+
+    <table id="board">
+        <tr>
+            <th onclick="cellClick(0, 0)"></th>
+            <th onclick="cellClick(0, 1)"></th>
+            <th onclick="cellClick(0, 2)"></th>
+        </tr>
+        <tr>
+            <th onclick="cellClick(1, 0)"></th>
+            <th onclick="cellClick(1, 1)"></th>
+            <th onclick="cellClick(1, 2)"></th>
+        </tr>
+        <tr>
+            <th onclick="cellClick(2, 0)"></th>
+            <th onclick="cellClick(2, 1)"></th>
+            <th onclick="cellClick(2, 2)"></th>
+        </tr>
+    </table>
+
+    <div class="message" id="message"></div>
+
+    <div class="mode-buttons" id="modeButtons">
+        <button onclick="chooseMode('player')">Player vs Player</button>
+        <button onclick="chooseMode('computer')">Player vs Computer</button>
+    </div>
+
+    <div class="play-again" id="playAgainButton" style="display: none;">
+        <button onclick="resetGame()">Play Again</button>
+    </div>
+
+    <script>
+        let board = [
+            ["", "", ""],
+            ["", "", ""],
+            ["", "", ""]
+        ];
+
+        let currentPlayer = "X";
+        let gameActive = false;
+        let gameMode;
+
+        function printBoard() {
+            for (let i = 0; i < 3; i++) {
+                for (let j = 0; j < 3; j++) {
+                    document.getElementById("board").rows[i].cells[j].innerHTML = board[i][j];
+                }
+            }
+        }
+
+        function checkWinner() {
+            for (let i = 0; i < 3; i++) {
+                if (board[i][0] !== "" && board[i][0] === board[i][1] && board[i][1] === board[i][2]) {
+                    return true;
+                }
+                if (board[0][i] !== "" && board[0][i] === board[1][i] && board[1][i] === board[2][i]) {
+                    return true;
+                }
+            }
+            if (board[0][0] !== "" && board[0][0] === board[1][1] && board[1][1] === board[2][2]) {
+                return true;
+            }
+            if (board[0][2] !== "" && board[0][2] === board[1][1] && board[1][1] === board[2][0]) {
+                return true;
+            }
+            return false;
+        }
+
+        function isBoardFull() {
+            for (let i = 0; i < 3; i++) {
+                for (let j = 0; j < 3; j++) {
+                    if (board[i][j] === "") {
+                        return false;
+                    }
+                }
+            }
+            return true;
+        }
+
+        function cellClick(row, col) {
+            if (!gameActive || board[row][col] !== "") {
+                return;
+            }
+
+            board[row][col] = currentPlayer;
+            printBoard();
+
+            if (checkWinner()) {
+                document.getElementById("message").innerHTML = `${currentPlayer} wins!`;
+                gameActive = false;
+            } else if (isBoardFull()) {
+                document.getElementById("message").innerHTML = "It's a tie!";
+                gameActive = false;
+            } else {
+                currentPlayer = (currentPlayer === "X") ? "O" : "X";
+                if (gameMode === "computer" && currentPlayer === "O") {
+                    computerTurn();
+                }
+            }
+
+            // Show Play Again button when the game is over
+            if (!gameActive) {
+                document.getElementById("playAgainButton").style.display = "block";
+            }
+        }
+
+        function computerTurn() {
+            let bestScore = -Infinity;
+            let bestMove;
+
+            for (let i = 0; i < 3; i++) {
+                for (let j = 0; j < 3; j++) {
+                    if (board[i][j] === "") {
+                        board[i][j] = "O";
+                        let score = minimax(board, 0, false);
+                        board[i][j] = "";
+
+                        if (score > bestScore) {
+                            bestScore = score;
+                            bestMove = {
+                                row: i,
+                                col: j
+                            };
+                        }
+                    }
+                }
+            }
+
+            board[bestMove.row][bestMove.col] = "O";
+            printBoard();
+
+            if (checkWinner()) {
+                document.getElementById("message").innerHTML = "Computer wins!";
+                gameActive = false;
+            } else if (isBoardFull()) {
+                document.getElementById("message").innerHTML = "It's a tie!";
+                gameActive = false;
+            } else {
+                currentPlayer = "X";
+            }
+
+            // Show Play Again button when the game is over
+            if (!gameActive) {
+                document.getElementById("playAgainButton").style.display = "block";
+            }
+        }
+
+        function minimax(board, depth, isMaximizing) {
+            let scores = {
+                X: -1,
+                O: 1,
+                tie: 0
+            };
+
+            if (checkWinner()) {
+                return scores[boardWinner()];
+            }
+
+            if (isBoardFull()) {
+                return scores["tie"];
+            }
+
+            if (isMaximizing) {
+                let bestScore = -Infinity;
+                for (let i = 0; i < 3; i++) {
+                    for (let j = 0; j < 3; j++) {
+                        if (board[i][j] === "") {
+                            board[i][j] = "O";
+                            let score = minimax(board, depth + 1, false);
+                            board[i][j] = "";
+                            bestScore = Math.max(score, bestScore);
+                        }
+                    }
+                }
+                return bestScore;
+            } else {
+                let bestScore = Infinity;
+                for (let i = 0; i < 3; i++) {
+                    for (let j = 0; j < 3; j++) {
+                        if (board[i][j] === "") {
+                            board[i][j] = "X";
+                            let score = minimax(board, depth + 1, true);
+                            board[i][j] = "";
+                            bestScore = Math.min(score, bestScore);
+                        }
+                    }
+                }
+                return bestScore;
+            }
+        }
+
+        function boardWinner() {
+            for (let i = 0; i < 3; i++) {
+                if (board[i][0] !== "" && board[i][0] === board[i][1] && board[i][1] === board[i][2]) {
+                    return board[i][0];
+                }
+                if (board[0][i] !== "" && board[0][i] === board[1][i] && board[1][i] === board[2][i]) {
+                    return board[0][i];
+                }
+            }
+            if (board[0][0] !== "" && board[0][0] === board[1][1] && board[1][1] === board[2][2]) {
+                return board[0][0];
+            }
+            if (board[0][2] !== "" && board[0][2] === board[1][1] && board[1][1] === board[2][0]) {
+                return board[0][2];
+            }
+            return null;
+        }
+
+        function resetGame() {
+            board = [
+                ["", "", ""],
+                ["", "", ""],
+                ["", "", ""]
+            ];
+            currentPlayer = "X";
+            gameActive = true;
+            document.getElementById("message").innerHTML = "";
+            printBoard();
+
+            // Hide Play Again button when the game is reset
+            document.getElementById("playAgainButton").style.display = "none";
+
+            // Show mode buttons after resetting the game
+            document.getElementById("modeButtons").style.display = "flex";
+
+            // If computer starts, make the first move
+            if (gameMode === "computer" && currentPlayer === "O") {
+                computerTurn();
+            }
+        }
+
+        function chooseMode(mode) {
+            gameMode = mode;
+            resetGame();
+
+            // Hide mode buttons after choosing a mode
+            document.getElementById("modeButtons").style.display = "none";
+
+            // If computer starts, make the first move
+            if (gameMode === "computer" && currentPlayer === "O") {
+                computerTurn();
+            }
+        }
+    </script>
+
+    <button onclick="resetGame()">Reset Game</button>
+</body>
+
+</html>
