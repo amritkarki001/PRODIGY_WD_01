@@ -3,7 +3,11 @@ body {
     font-family: 'Arial', sans-serif;
     background: #f4f4f4;
     height: 3000px;
-    background: linear-gradient(55deg, #00f1bd, #ff9a9e);
+    background: linear-gradient(270deg, #b053b5, #c797ca, #7789bf, #4b64ae);
+    background-size: 800% 800%;
+    -webkit-animation: AnimationName 3s ease infinite;
+    -moz-animation: AnimationName 5s ease infinite;
+    animation: AnimationName 5s ease infinite;
 }
 
 nav {
@@ -71,4 +75,48 @@ nav.scrolled {
 
 footer {
     padding: 100px;
+}
+
+.css-selector {
+    background: linear-gradient(270deg, #b053b5, #c797ca, #7789bf, #4b64ae);
+    background-size: 800% 800%;
+    -webkit-animation: AnimationName 30s ease infinite;
+    -moz-animation: AnimationName 30s ease infinite;
+    animation: AnimationName 30s ease infinite;
+}
+
+@-webkit-keyframes AnimationName {
+    0% {
+        background-position: 0% 50%
+    }
+    50% {
+        background-position: 100% 50%
+    }
+    100% {
+        background-position: 0% 50%
+    }
+}
+
+@-moz-keyframes AnimationName {
+    0% {
+        background-position: 0% 50%
+    }
+    50% {
+        background-position: 100% 50%
+    }
+    100% {
+        background-position: 0% 50%
+    }
+}
+
+@keyframes AnimationName {
+    0% {
+        background-position: 0% 50%
+    }
+    50% {
+        background-position: 100% 50%
+    }
+    100% {
+        background-position: 0% 50%
+    }
 }
