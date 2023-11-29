@@ -22,6 +22,7 @@ This project is Just a landing page with gradient background with animation.
 - HTML
 - CSS
 - JavaScript
+-Bootstraps
 
 ## Credits
 
