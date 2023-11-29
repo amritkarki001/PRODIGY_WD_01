@@ -1,5 +1,5 @@
 # PRODIGY_WD_01
-# StopWatch
+# landingpage
 
 A simple stopwatch web application developed by [Amrit Karki](https://www.linkedin.com/in/amritkarkii001/).
 
