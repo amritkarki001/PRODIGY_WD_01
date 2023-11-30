@@ -599,7 +599,7 @@ section {
     padding: 0 0 10px 60px;
     margin-bottom: 20px;
     font-size: 14px;
-    color: #6182ba;
+    color: #ffffff;
 }
 
 .contact .info .email p {
@@ -619,4 +619,8 @@ section {
     height: 36px;
     transition: 0.3s;
     margin-right: 10px;
+}
+
+form {
+    align: center;
 }
